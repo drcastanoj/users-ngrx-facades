@@ -6,7 +6,7 @@ import {
   selectCurrentPage,
   selectItemPerPage,
   selectItemsPerPageSize,
-  secletPagination,
+  selectPagination,
   selectSeed,
   selectLoading
 } from '../selectors/users.selectors';
@@ -22,7 +22,7 @@ export class UsersFacade {
 
   usersList$: Observable<IUser[]> = this.store.pipe(select(selectUsersResult), filter(isDefinedGuard));
   seed$: Observable<string> = this.store.pipe(select(selectSeed), filter(isDefinedGuard));
-  pagination$: Observable<IPagination> = this.store.pipe(select(secletPagination), filter(isDefinedGuard));
+  pagination$: Observable<IPagination> = this.store.pipe(select(selectPagination), filter(isDefinedGuard));
   currentPage$: Observable<number> = this.store.pipe(select(selectCurrentPage), filter(isDefinedGuard));
   itemPerPage$: Observable<number> = this.store.pipe(select(selectItemPerPage), filter(isDefinedGuard));
   itemsPerPageSize$: Observable<number[]> = this.store.pipe(select(selectItemsPerPageSize), filter(isDefinedGuard));

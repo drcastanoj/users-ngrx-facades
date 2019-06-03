@@ -24,23 +24,23 @@ export const selectSeed = createSelector(
   (stateUsers: UsersState) => stateUsers.seed
 );
 
-export const secletPagination = createSelector(
+export const selectPagination = createSelector(
   selectUsersState,
   (stateUsers: UsersState) => stateUsers.pagination
 );
 
 export const selectCurrentPage = createSelector(
-  secletPagination,
+  selectPagination,
   (pagination: IPagination) => pagination.currentPage
 );
 
 export const selectItemPerPage = createSelector(
-  secletPagination,
+  selectPagination,
   (pagination: IPagination) => pagination.itemPerPage
 );
 
 export const selectItemsPerPageSize = createSelector(
-  secletPagination,
+  selectPagination,
   (pagination: IPagination) => pagination.itemsPerPageSizes
 );
 
