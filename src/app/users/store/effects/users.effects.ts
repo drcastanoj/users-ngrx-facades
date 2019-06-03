@@ -5,7 +5,9 @@ import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SearchUsersSuccess, SearchUsers, SelectPage, ChangePageSize } from '../actions/users.actions';
-import { UsersFacade } from '../facades/users.facade';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import { selectSeed, selectPagination } from '../selectors/users.selectors';
 
 @Injectable()
 export class UsersEffects {
@@ -14,7 +16,7 @@ export class UsersEffects {
   searchUsers$ = this.actions$
     .pipe(
       ofType(UsersActionTypes.SearchUsers),
-      withLatestFrom(this.facade.pagination$),
+      withLatestFrom(this.store.pipe(select(selectPagination))),
       mergeMap(([action, pagination]) => this.usersService.searchUsers((action as SearchUsers).payload, 1, pagination.itemPerPage)
         .pipe(
           map(result => new SearchUsersSuccess(result),
@@ -28,8 +30,8 @@ export class UsersEffects {
   selectPage$ = this.actions$
     .pipe(
       ofType(UsersActionTypes.SelectPage),
-      withLatestFrom(this.facade.pagination$),
-      withLatestFrom(this.facade.seed$),
+      withLatestFrom(this.store.pipe(select(selectPagination))),
+      withLatestFrom(this.store.pipe(select(selectSeed))),
       mergeMap(([[action, pagination], seed]) => this.usersService.searchUsers(
         seed, (action as SelectPage).payload, pagination.itemPerPage)
         .pipe(
@@ -43,7 +45,7 @@ export class UsersEffects {
   prevPage$ = this.actions$
     .pipe(
       ofType(UsersActionTypes.ChangePageSize),
-      withLatestFrom(this.facade.seed$),
+      withLatestFrom(this.store.pipe(select(selectSeed))),
       mergeMap(([action, seed]) => this.usersService.searchUsers(
         seed, 1, (action as ChangePageSize).payload)
         .pipe(
@@ -55,7 +57,7 @@ export class UsersEffects {
 
   constructor(private usersService: UsersService,
     private actions$: Actions,
-    private facade: UsersFacade) {
+    private store: Store<AppState>) {
 
   }
 }

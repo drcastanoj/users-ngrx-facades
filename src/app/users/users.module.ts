@@ -6,9 +6,8 @@ import { StoreUsersModule } from './store/store-users.module';
 import { UsersService } from './users.service';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { UsersFacade } from './store/facades/users.facade';
 import { ReactiveFormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export const routes: Routes = [{
   path: '', component: UsersComponent
@@ -19,7 +18,6 @@ export const routes: Routes = [{
   declarations: [UsersComponent, UserDetailComponent],
   providers: [
     UsersService,
-    UsersFacade,
   ],
   imports: [
     CommonModule,
