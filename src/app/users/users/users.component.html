@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <div class="row">
+
+    <div class="col-12 my-3 input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Search Users</span>
+      </div>
+      <input ype="text" [formControl]="search" [value]="(seed$ | async)" class="form-control">
+    </div>
+
+    <ngb-pagination class="col-6  d-flex justify-content-center" 
+      [page]="(currentPage$ | async) "
+      [pageSize]="(itemsPerPage$ | async)" 
+      [collectionSize]="'200'" 
+      (pageChange)="facade.selectPage($event)"
+      [maxSize]="1" 
+      [ellipses]="false">
+    </ngb-pagination>
+    
+    <div class="col-6 d-flex justify-content-center">
+      <span *ngFor="let size of (itemsPerPageSize$ | async)">
+        <button type="button" (click)="facade.changePageSize(size)"
+        class="btn ml-3 " 
+        [ngClass]="{ 'btn-dark': (itemsPerPage$ | async) === size }">{{size}}</button>
+      </span>
+    </div>
+ 
+    <div class="card col-12 my-3" *ngIf="!(loading$ | async)">
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let user of (users$ | async)" class="list-group-item">{{user.name.first + ' ' + user.name.last }}
+        </li>
+      </ul>
+    </div>
+
+    
+      
+    
+  </div>
+</div>
