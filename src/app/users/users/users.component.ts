@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersFacade } from '../store/facades/users.facade';
 import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -16,20 +18,24 @@ export class UsersComponent implements OnInit, OnDestroy {
   itemsPerPageSize$ = this.facade.itemsPerPageSize$;
   seed$ = this.facade.seed$;
   loading$ = this.facade.loading$;
-
+  suscriptions: Subscription[] = [];
 
   constructor(public facade: UsersFacade) { }
 
   ngOnInit() {
     this.facade.searchUsers('batman');
-    this.search.valueChanges.subscribe(val => {
+    this.suscriptions.push(this.search.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(val => {
       this.facade.searchUsers(val);
-    });
+    }));
   }
 
 
   ngOnDestroy() {
-
+    for (const suscription of this.suscriptions) {
+      suscription.unsubscribe();
+    }
   }
 
 }
