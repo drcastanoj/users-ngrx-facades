@@ -5,6 +5,7 @@ import { SelectPage, ChangePageSize, SearchUsers } from '../store/actions/users.
 import { AppState } from '../store/state/app.state';
 import { selectPagination, selectUsers, selectUsersResult, selectLoading, selectSeed } from '../store/selectors/users.selectors';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -51,7 +52,9 @@ export class UsersComponent implements OnInit, OnDestroy {
         this.loading = loading;
       }
     ));
-    this.suscriptions.push(this.search.valueChanges.subscribe(val => {
+    this.suscriptions.push(this.search.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(val => {
       this.searchUsers(val);
     }));
   }
